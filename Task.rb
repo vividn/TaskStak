@@ -40,32 +40,37 @@ class Task
   end
   def create_output_string(indent_level=-1,position=0)
 
-    #Number of spaces per indent
-    indent_spaces = 2
-    ret = ' '*(indent_spaces*indent_level)
+    #Output string
+    ret = ""
 
-    #No collapsing character or index number for top level list
+    #No index number for top level list
     if indent_level >= 0
 
+      #Number of spaces per indent
+      indent_spaces = 2
+      ret << ' '*(indent_spaces*indent_level)
+
       #Add collapsing character (+ or -, · if no subtasks)
-      if @subtasks.empty?
-        collapsing_character = '  ·'
+      if @collapsed && !@subtasks.empty?
+        collapsing_format_str = "[%d] "
       else
-        collapsing_character = @collapsed ? '[+]' : '[-]'
+        collapsing_format_str = "%d| "
       end
-      ret << collapsing_character
 
       #Add index number
-      if position >= 100
-        ret << position.to_s
-      else
-        ret << sprintf("%2d\. ",position)
-      end
+      ret << sprintf(collapsing_format_str,position).rjust(5)
+
     end
 
     # Add name of task
     ret << @name
     ret << "\n"
+
+    # Add underline if title
+    if indent_level < 0
+      ret << "~"*(@name.length+2)
+      ret << "\n"
+    end
 
     # Add subtasks
     unless @collapsed && indent_level >= 0
