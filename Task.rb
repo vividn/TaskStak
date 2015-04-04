@@ -2,7 +2,7 @@ class Task
   attr_reader :subtasks, :parent_task
 
   def initialize(name, parent_task = self)
-    @name = name
+    @name = name.chomp
     @parent_task = parent_task
     @subtasks = []
     @complete = false
@@ -31,7 +31,7 @@ class Task
     end
   end
 
-  def rename(new_name = gets)
+  def rename(new_name = gets.chomp)
     @name = new_name
   end
 
