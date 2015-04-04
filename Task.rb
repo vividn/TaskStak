@@ -9,6 +9,10 @@ class Task
     @collapsed = false
   end
 
+  def [](index)
+    @subtasks[index]
+  end
+
   def add_subtask(location = @subtasks.length)
     #Add tasks via user interface repeatedly.
     input = gets.chomp
