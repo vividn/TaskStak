@@ -44,6 +44,17 @@ while true
     end
 
     case command_str
+
+      when /^ *$/
+        # No command text
+        # If there is no ending slash, add mode
+        # Ending slash, open the list
+        if ending_slash
+          current_list = item
+        else
+          target_list.add_subtask(item_num)
+        end
+
       when /^a *(.*)$/
         # 'a [text]'
         # Adds optional text as a new task above selected spot
@@ -93,3 +104,4 @@ while true
 
 
 end
+
