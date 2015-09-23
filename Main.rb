@@ -25,17 +25,18 @@ while true
   parsed_input = /^(?<subject>-?[0-9]+(\/-?[0-9]+)*\/?)?(?<action>[a-zA-Z]+)(?<predicate>-?[0-9]+(\/-?[0-9]+)*\/?)?( (?<text>.+))?$/.match(input)
 
   #TODO: Do something with bad input
-  #TODO: Switch ints to last number, or add last number recording for sibling number reasons
 
   subject_str = parsed_input["subject"]
   subject_task = subject_str.to_task(open_task)
   subject_end_slash = subject_str[-1].eql?("/")
+  # Subject int is the last number in the series, used when doing operations on the parent task.
+  subject_int = /[0-9]+$/.match(subject_str).to_s.to_i
 
   action = parsed_input["action"]
 
   predicate_str = parsed_input["predicate"]
   predicate_task = predicate_str.to_task(open_task)
-  predicate_int = predicate_str.to_i
+  predicate_int = /[0-9]+$/.match(predicate_str).to_s.to_i
   predicate_end_slash = predicate_str[-1].eql?("/")
 
   input_text = parsed_input["text"]
