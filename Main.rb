@@ -16,7 +16,8 @@ while true
   system "clear" or system "cls"
   print open_task
 
-  input = gets() #TODO add input string
+  input = gets() #TODO add input prompt
+  next if input.empty?
 
   # Input should be in the for (subject)(action)(predicate) text
   # All parts are optional, but look specific
