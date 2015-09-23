@@ -1,9 +1,11 @@
 class Task
   attr_reader :subtasks, :parent_task
+  attr_accessor :sibling_index
 
-  def initialize(name, parent_task = self)
+  def initialize(name)
     @name = name.chomp
-    @parent_task = parent_task
+    @parent_task = self
+    @sibling_index = 0
     @subtasks = []
     @complete = false
     @collapsed = false
@@ -11,6 +13,40 @@ class Task
 
   def [](index)
     @subtasks[index]
+  end
+
+  def move(new_parent,location=new_parent.subtasks.length)
+    old_parent = @parent_task
+
+    # Move the task to the new parent and remove from the old parent updating references
+    @sibling_index = new_parent.insert_subtask(self,location)
+    old_parent.remove(self)
+    @parent_task = new_parent
+
+    #Renumber the parents
+    old_parent.renumber
+    new_parent.renumber
+
+  end
+
+  def renumber
+    @subtasks.each_with_index do |subtask,index|
+      subtask.sibling_index = index
+    end
+  end
+
+  #TODO:delete (maybe in the main program instead)
+
+  def remove(subtask)
+    #Only call internally (use delete or move externally)
+    if subtask.class = Integer
+      subtasks.delete_at(subtask)
+    elsif subtask.class = Task
+      #TODO: add exception here if returns nil
+      substaks.delete(subtask)
+    else
+      #TODO: add exception here
+    end
   end
 
   def add_subtask(location = @subtasks.length)
@@ -21,18 +57,20 @@ class Task
       add_subtask(location+1)
     end
   end
+
   def insert_subtask(location = @subtasks.length,subtask)
-    #Clamp location
+    #Clamp location (so if large number entered put at end of list)
     location = [0,location,@subtasks.length].sort[1]
 
     if subtask.class == Task
       @subtasks.insert(location,subtask)
     elsif subtask.class == String
-      new_subtask = Task.new(subtask,self)
-      @subtasks.insert(location,new_subtask)
+      new_subtask = Task.new(subtask)
+      new_subtask.move(self,location)
     else
       #TODO add argument error for bad class
     end
+    location
   end
 
   def rename(new_name = gets.chomp)
@@ -98,3 +136,16 @@ class Task
   end
 
 end
+
+class String
+  def to_task(open_task)
+    return open_task if self.empty?
+    first_number_match = /^\/?([0-9]+)\/?/.match(self)
+    target_task = firt_number_match[1]
+
+    # Recurse through the rest of the string
+    $.to_task(target_task)
+  end
+end
+
+#TODO: add gemfile and testing capabilities and test "to_task"

@@ -1,21 +1,57 @@
 require_relative 'task'
+#TODO: use ARGV to pass in task file
 
+top_level_task = Task.new("Top Level")
+open_task = top_level_task
 
-#top_level_list = Task.new("Top Level") TODO: uncomment to actually have top_level
-# current_list = top_level_list
-current_list = Task.new("Top Level")
+# Create specialized inbox list
+inbox = Task.new("Inbox")
+inbox.move(top_level_task)
+
+#TODO: add ability to change default action behavior
+default_action_slash = "open"
+default_action_no_slash = "add"
 
 while true
   system "clear" or system "cls"
-  print current_list
+  print open_task
 
   input = gets() #TODO add input string
+
+  # Input should be in the for (subject)(action)(predicate) text
+  # All parts are optional, but look specific
+  # Subject, Predicate are in the form x[/y/z/...] where x,y,z are numbers specifying the path to the task of interest
+  # action should be a single letter or a command (e.g, 'a', 'add', 'i', 'down')
+  parsed_input = /^(?<subject>-?[0-9]+(\/-?[0-9]+)*\/?)?(?<action>[a-zA-Z]+)(?<predicate>-?[0-9]+(\/-?[0-9]+)*\/?)?( (?<text>.+))?$/.match(input)
+
+  #TODO: Do something with bad input
+
+  subject_str = parsed_input["subject"]
+  subject_task = subject_str.to_task(open_task)
+  subject_end_slash = subject_str[-1].eql?("/")
+
+  action = parsed_input["action"]
+
+  predicate_str = parsed_input["predicate"]
+  predicate_task = predicate_str.to_task(open_task)
+  predicate_int = predicate_str.to_i
+  predicate_end_slash = predicate_str[-1].eql?("/")
+
+  input_text = parsed_input["text"]
+
+  #Shorthand for quick commands. Does default if only subject is provided
+  unless action
+    action = (subject_end_slash ? default_action_slash : default_action_no_slash)
+  end
 
   # If command starts with a number, it is referring to that spot in the list
   # '0' adds new task at top of list
   # '0/4' adds new task above subtask 4 in task 0
   # '0/' opens task 0
   # '-2' adds new item above 2nd from last task in list
+
+  #TODO: create list of commands
+
   if input.match /^(-?\d+)((?:\/-?\d+)*)(\/?) *(.*)$/
 
     # Current level item selection
@@ -32,7 +68,7 @@ while true
     # The command to pass to the item
     command_str = $4
 
-    target_list = current_list
+    target_list = open_task
     item = target_list[item_num]
 
     # If sublists are specified, 'navigate' to them
@@ -50,7 +86,7 @@ while true
         # If there is no ending slash, add mode
         # Ending slash, open the list
         if ending_slash
-          current_list = item
+          open_task = item
         else
           target_list.add_subtask(item_num)
         end
@@ -62,7 +98,7 @@ while true
         if $1.empty?
           target_list.add_subtask(item_num)
         else
-          current_list.insert_subtask(item_num,$1)
+          open_task.insert_subtask(item_num,$1)
         end
     end
 
@@ -70,35 +106,6 @@ while true
 
 
     # puts "item num: #{item_num}, subtask_str: #{subtask_str}, ending_slash: #{ending_slash}, command_str: #{command_str}"
-
-  end
-
-  case input
-
-    when /^a?([\d]*)$/
-      # Adds entries at a specified point in the list until a line feed is given
-      if $1.empty?
-        current_list.add_subtask
-      else
-        current_list.add_subtask($1.to_i)
-      end
-
-    when /^o([0-9]+)$/
-      current_list = current_list.subtasks[$1.to_i]
-
-    when /^p$/
-      current_list = current_list.parent_task
-
-    when /^c?([\d]*)$/
-      #Collapses a given list
-      if $1.empty?
-        current_list.toggle_collapse
-      else
-        current_list.subtasks[$1.to_i].toggle_collapse
-      end
-
-    else
-      p "Command not recognized."
 
   end
 

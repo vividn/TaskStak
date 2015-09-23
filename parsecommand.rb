@@ -22,7 +22,7 @@ def parse_input(input,current_list)
   #
   # #a - Adding
   # TODO: $a  - adds multiple tasks above $ (until empty line is received)
-  # TODO: $a* - adds one task, *, above $
+  # TODO: $a * - adds one task, *, above $
   # TODO: a   - adds multiple tasks at end of list
   # TODO: A   - adds multiple tasks at beginning of list (equivalent to 0a)
   #
@@ -47,11 +47,34 @@ def parse_input(input,current_list)
 end
 
 def get_task(lineage_str,cur_list)
+  #need to output parent task, target task, target index
   lineage = lineage_str.split '/'
+
+  parent_list = cur_list
+  target_task = cur_list
+  target_index = 0
+
   lineage.each do |task_index|
     task_index = task_index.to_i
-    target_list = item
-    item_num = task_index
-    item = target_list[item_num]
+
+    # Move down the tree of tasks if sublevels are indicated
+    parent_list = target_task
+    target_task = parent_list[task_index]
+    target_index = task_index
   end
+
+  return parent_list,target_task,target_index
+
 end
+
+samp = Task.new("Top Level")
+samp.insert_subtask(0,'AB')
+samp.insert_subtask(1,'BC')
+samp.insert_subtask(2,'CD')
+samp.insert_subtask(3,'DE')
+samp2 = samp[2]
+samp2.insert_subtask(0,'EF')
+samp2.insert_subtask(0,'FG')
+
+parent_list, target_task, target_index = get_task('2/1',samp)
+print "P: #{parent_list}\n\n T: #{target_task}\n\n I: #{target_index}"
