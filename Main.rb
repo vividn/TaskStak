@@ -60,9 +60,18 @@ while true
   # u, up           - moves task up in a list
   # d, down         - moves task down in a list
   # m, move         - moves task above another task
+  # i, inbox        - adds tasks to the inbox
 
   case action
     when 'a', 'add'
+    when 'x', 'check', 'done'
+    when 'o', 'open'
+    when 'u', 'up'
+    when 'd', 'down'
+    when 'm', 'move'
+    when 'i', 'inbox'
+    else
+      #TODO: Add bad command error
 
   end
 
