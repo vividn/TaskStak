@@ -23,10 +23,6 @@ class Task
     old_parent.remove(self)
     @parent_task = new_parent
 
-    #Renumber the parents
-    old_parent.renumber
-    new_parent.renumber
-
   end
 
   def renumber
@@ -39,14 +35,15 @@ class Task
 
   def remove(subtask)
     #Only call internally (use delete or move externally)
-    if subtask.class = Integer
-      subtasks.delete_at(subtask)
-    elsif subtask.class = Task
+    if subtask.class == Integer
+      @subtasks.delete_at(subtask)
+    elsif subtask.class == Task
       #TODO: add exception here if returns nil
-      substaks.delete(subtask)
+      @subtasks.delete(subtask)
     else
       #TODO: add exception here
     end
+    self.renumber
   end
 
   def add_subtask(location = @subtasks.length)
@@ -70,6 +67,7 @@ class Task
     else
       #TODO add argument error for bad class
     end
+    self.renumber
     location
   end
 
