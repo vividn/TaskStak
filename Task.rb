@@ -19,7 +19,7 @@ class Task
     old_parent = @parent_task
 
     # Move the task to the new parent and remove from the old parent updating references
-    @sibling_index = new_parent.insert_subtask(self,location)
+    @sibling_index = new_parent.insert_subtask(location,self)
     old_parent.remove(self)
     @parent_task = new_parent
 
