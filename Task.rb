@@ -16,6 +16,7 @@ class Task
   end
 
   def move(new_parent,location=new_parent.subtasks.length)
+    #TODO: prevent moving into a subtask of self
     old_parent = @parent_task
 
     # Move the task to the new parent and remove from the old parent updating references
@@ -29,6 +30,12 @@ class Task
     @subtasks.each_with_index do |subtask,index|
       subtask.sibling_index = index
     end
+  end
+
+  def get_parent(parent_number)
+    # 0 is immediate parent, 1 is parent's parent, etc.
+    return @parent_task if parent_number <= 0
+    @parent_task.get_parent(parent_number-1)
   end
 
   #TODO:delete (maybe in the main program instead)
