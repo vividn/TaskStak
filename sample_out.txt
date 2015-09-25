@@ -1,0 +1,26 @@
+Inbox
+	Create an awesome program
+	Do it fine
+	Another list
+		Subtask item
+		Subtask item 2
+	Checking for indent level
+Personal
+	Remove all the splinters from food items
+	Watch TV
+Lab
+	Read a shit ton of papers
+	Think about stuff
+	Process thoughts
+	Synthesize neurotransmitters
+		NE
+		DA
+		Ach
+Class
+	Mulilevel list
+		deep
+			deeper
+				deepets
+		multi indent decrease
+Test
+	Weird characters: ♠, ♦, ❧

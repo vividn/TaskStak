@@ -1,5 +1,5 @@
 class Task
-  attr_reader :subtasks, :parent_task
+  attr_reader :subtasks, :parent_task, :name
   attr_accessor :sibling_index
 
   def initialize(name)

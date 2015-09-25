@@ -1,5 +1,7 @@
 require_relative 'task'
 
+#TODO: merge these into Task class
+
 # load_task returns a task loaded from a .txt file where indents create subtasks
 def load_task(task_file_str, name=nil)
   name = name || task_file_str.slice(/^.*\./)
@@ -46,5 +48,19 @@ def load_task(task_file_str, name=nil)
   return_task
 end
 
-top_task = load_task("Sample_task_list.txt","Top Level")
-print top_task
+def save_task(task,task_file_str)
+  # Define a recursive function to iterate through when making the file
+  def task_writer(task_file, current_task, indent_level)
+    current_task.subtasks.each do |subtask|
+      task_file.puts "\t"*indent_level + subtask.name
+      task_writer(task_file, subtask, indent_level+1)
+    end
+  end
+
+  File.open(task_file_str,'w') do |task_file|
+    task_writer(task_file, task, 0)
+  end
+end
+
+a = load_task("Sample_task_list.txt")
+save_task(a,"sample_out.txt")
