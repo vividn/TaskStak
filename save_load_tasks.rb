@@ -1,6 +1,7 @@
 require_relative 'task'
 
 #TODO: merge these into Task class
+#TODO: save/load task information (such as complete?) in file as well
 
 # load_task returns a task loaded from a .txt file where indents create subtasks
 def load_task(task_file_str, name=nil)

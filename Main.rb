@@ -11,6 +11,7 @@ inbox.move(top_level_task)
 #TODO: add ability to change default action behavior
 default_action_slash = "open"
 default_action_no_slash = "add"
+#TODO: add settings and default settings hashes
 
 while true
   system "clear" or system "cls"
@@ -31,7 +32,7 @@ while true
   subject_task = subject_str.to_task(open_task)
   subject_end_slash = subject_str[-1].eql?("/")
   # Subject int is the last number in the series, used when doing operations on the parent task.
-  subject_int = /[0-9]+$/.match(subject_str).to_s.to_i
+  subject_int = /[0-9]+\/?$/.match(subject_str).to_s.to_i
 
   action = parsed_input["action"]
 
@@ -63,15 +64,49 @@ while true
   # d, down         - moves task down in a list
   # m, move         - moves task above another task
   # i, inbox        - adds tasks to the inbox
+  # l, load         - loads given task from a txt file (overwrites or appends to current subtasks)
+  # s, save         - saves task to a txt file
 
   case action
     when 'a', 'add'
+      if subject_str
+        #TODO: might have to fix for adding things to the end of the list
+        #when 'a' follows a task add new_task after it
+        #when 'a' precedes a task number add new_task before it
+        #if no task is specified at to the top of the current list
+        if subject_task
+          # 'a' follows task (e.g., 3/2a)
+          parent_task = subject_task.parent
+          insert_location = subject_int
+        elsif predicate_task
+          # 'a' precedes task (e.g., a4)
+          parent_task = predicate_task.parent
+          insert_location = predicate_int
+        else
+          # 'a' is alone
+          parent_task = open_task
+          insert_location = 0 #TODO: change for settings
+        end
+
+        #If text is specified add it as just one subtask
+        #If no text is given, add tasks successively until a blank line is given
+        if input_text
+          parent_task.insert_subtask(insert_location,input_text)
+        else
+          parent_task.add_subtask(insert_location)
+        end
+
+      end
+
     when 'x', 'check', 'done'
     when 'o', 'open'
     when 'u', 'up'
     when 'd', 'down'
     when 'm', 'move'
     when 'i', 'inbox'
+    when 'l', 'load'
+    when 's', 'save'
+
     else
       #TODO: Add bad command error
 
