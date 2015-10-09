@@ -82,6 +82,10 @@ class Task
     @name = new_name
   end
 
+  def inspect
+    "#{@name}; p:\"#{@parent_task.name}\", sib#:#{@sibling_index}, subs:#{@subtasks.length}"
+  end
+
   def to_s
     create_output_string
   end
@@ -146,11 +150,17 @@ class String
   def to_task(open_task)
     return open_task if self.empty?
     first_number_match = /^\/?([0-9]+)\/?/.match(self)
-    target_task = open_task[firt_number_match[1].to_i]
+    target_task = open_task[first_number_match[1].to_i]
     #TODO: add end of list functionality here
 
     # Recurse through the rest of the string
     $'.to_task(target_task)
+  end
+end
+
+class NilClass
+  def to_task(open_task)
+    nil
   end
 end
 

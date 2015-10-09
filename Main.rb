@@ -28,7 +28,7 @@ while true
 
   #TODO: Do something with bad input
 
-  subject_str = parsed_input["subject"]
+  subject_str = parsed_input["subject"] || ""
   subject_task = subject_str.to_task(open_task)
   subject_end_slash = subject_str[-1].eql?("/")
   # Subject int is the last number in the series, used when doing operations on the parent task.
@@ -36,7 +36,7 @@ while true
 
   action = parsed_input["action"]
 
-  predicate_str = parsed_input["predicate"]
+  predicate_str = parsed_input["predicate"] || ""
   predicate_task = predicate_str.to_task(open_task)
   predicate_int = /[0-9]+$/.match(predicate_str).to_s.to_i
   predicate_end_slash = predicate_str[-1].eql?("/")
@@ -69,33 +69,30 @@ while true
 
   case action
     when 'a', 'add'
-      if subject_str
-        #TODO: might have to fix for adding things to the end of the list
-        #when 'a' follows a task add new_task after it
-        #when 'a' precedes a task number add new_task before it
-        #if no task is specified at to the top of the current list
-        if subject_task
-          # 'a' follows task (e.g., 3/2a)
-          parent_task = subject_task.parent
-          insert_location = subject_int
-        elsif predicate_task
-          # 'a' precedes task (e.g., a4)
-          parent_task = predicate_task.parent
-          insert_location = predicate_int
-        else
-          # 'a' is alone
-          parent_task = open_task
-          insert_location = 0 #TODO: change for settings
-        end
+      #TODO: might have to fix for adding things to the end of the list
+      #when 'a' follows a task add new_task after it
+      #when 'a' precedes a task number add new_task before it
+      #if no task is specified at to the top of the current list
+      if not(subject_str.empty?)
+        # 'a' follows task (e.g., 3/2a)
+        parent_task = subject_task.parent_task
+        insert_location = subject_int+1
+      elsif not(predicate_str.empty?)
+        # 'a' precedes task (e.g., a4)
+        parent_task = predicate_task.parent_task
+        insert_location = predicate_int
+      else
+        # 'a' is alone
+        parent_task = open_task
+        insert_location = 0 #TODO: change for settings
+      end
 
-        #If text is specified add it as just one subtask
-        #If no text is given, add tasks successively until a blank line is given
-        if input_text
-          parent_task.insert_subtask(insert_location,input_text)
-        else
-          parent_task.add_subtask(insert_location)
-        end
-
+      #If text is specified add it as just one subtask
+      #If no text is given, add tasks successively until a blank line is given
+      if input_text
+        parent_task.insert_subtask(insert_location,input_text)
+      else
+        parent_task.add_subtask(insert_location)
       end
 
     when 'x', 'check', 'done'
