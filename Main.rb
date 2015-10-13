@@ -75,11 +75,11 @@ while true
       #if no task is specified at to the top of the current list
       if not(subject_str.empty?)
         # 'a' follows task (e.g., 3/2a)
-        parent_task = subject_task.parent_task
-        insert_location = subject_int+1
+        parent_task = (subject_task || open_task).parent_task
+        insert_location = subject_int
       elsif not(predicate_str.empty?)
         # 'a' precedes task (e.g., a4)
-        parent_task = predicate_task.parent_task
+        parent_task = (predicate_task || open_task).parent_task
         insert_location = predicate_int
       else
         # 'a' is alone
