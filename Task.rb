@@ -151,7 +151,6 @@ class String
     return open_task if self.empty?
     first_number_match = /^\/?([0-9]+)\/?/.match(self)
     target_task = open_task[first_number_match[1].to_i]
-    #TODO: add end of list functionality here
 
     # Recurse through the rest of the string
     $'.to_task(target_task)

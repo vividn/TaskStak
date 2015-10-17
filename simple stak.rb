@@ -11,7 +11,7 @@ while (input = gets.chomp) != "exit"
   end
 
   system 'cls'
-  simple_stack.reverse.each do |task|
+  simple_stack.each do |task|
     print "· #{task}\n"
   end
 

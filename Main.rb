@@ -24,9 +24,10 @@ while true
   # All parts are optional, but look specific
   # Subject, Predicate are in the form x[/y/z/...] where x,y,z are numbers specifying the path to the task of interest
   # action should be a single letter or a command (e.g, 'a', 'add', 'i', 'down')
-  parsed_input = /^(?<subject>-?[0-9]+(\/-?[0-9]+)*\/?)?(?<action>[a-zA-Z]+)(?<predicate>-?[0-9]+(\/-?[0-9]+)*\/?)?( (?<text>.+))?$/.match(input)
+  parsed_input = /^(?<subject>-?[0-9]+(\/-?[0-9]+)*\/?)?(?<action>[a-zA-Z]+)?(?<predicate>-?[0-9]+(\/-?[0-9]+)*\/?)?( (?<text>.+))?$/.match(input)
 
   #TODO: Do something with bad input
+  #TODO: Refactor to_task as a generic method rather than string method, return parent task as well
 
   subject_str = parsed_input["subject"] || ""
   subject_task = subject_str.to_task(open_task)
