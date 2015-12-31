@@ -15,6 +15,10 @@ class Task
     @subtasks[index]
   end
 
+  def mark_complete
+    
+  end
+
   def move(new_parent,location=new_parent.subtasks.length)
     #TODO: prevent moving into a subtask of self
     old_parent = @parent_task
