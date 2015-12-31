@@ -1,5 +1,5 @@
 class Task
-  attr_reader :subtasks, :parent_task, :name
+  attr_reader :subtasks, :parent_task, :name, :complete, :xsubtasks
   attr_accessor :sibling_index
 
   def initialize(name)
@@ -7,6 +7,8 @@ class Task
     @parent_task = self
     @sibling_index = 0
     @subtasks = []
+    @complete = false
+    @xsubtasks = []
     @complete = false
     @collapsed = false
   end
@@ -16,8 +18,32 @@ class Task
   end
 
   def mark_complete
-    
+    @complete = true
+
+    #signal to parent to move self from subtasks array to completed array
+    @parent_task.moveto_xsubtasks(self)
+
   end
+
+  def moveto_xsubtasks(calling_subtask)
+    @xsubtasks.unshift(self.remove(calling_subtask))
+  end
+
+  def movefrom_xsubtasks(calling_subtask)
+    insert_subtask(calling_subtask.sibling_index,calling_subtask)
+    @xsubtasks.delete(calling_subtask)
+  end
+
+  def mark_incomplete
+    @complete = false
+
+    #move subtask back into the active list for parent in previous location
+    @parent_task.movefrom_xsubtasks(self)
+  end
+
+ def complete?
+   @complete
+ end
 
   def move(new_parent,location=new_parent.subtasks.length)
     #TODO: prevent moving into a subtask of self
@@ -47,14 +73,15 @@ class Task
   def remove(subtask)
     #Only call internally (use delete or move externally)
     if subtask.class == Integer
-      @subtasks.delete_at(subtask)
+      ret = @subtasks.delete_at(subtask)
     elsif subtask.class == Task
       #TODO: add exception here if returns nil
-      @subtasks.delete(subtask)
+      ret = @subtasks.delete(subtask)
     else
-      #TODO: add exception here
+      raise TypeError.new "remove() needs Integer or Task, got #{subtask.class}"
     end
     self.renumber
+    return ret
   end
 
   def add_subtask(location = @subtasks.length)

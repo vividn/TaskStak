@@ -96,6 +96,15 @@ while true
       end
 
     when 'x', 'check', 'done'
+      completing_task = subject_task || predicate_task || open_task.subtasks[0]
+      completing_task.mark_complete
+
+    when 'xx', 'ux', 'uncheck'
+      open_task.xsubtasks[0].mark_incomplete
+
+    when 'c','completed'
+
+
     when 'o', 'open'
       #opens a task so that it the current task
       #if o appears by itself open parent task
