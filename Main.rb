@@ -101,7 +101,7 @@ while true
       #if o appears by itself open parent task
 
       #Prioritize number entered before 'o'
-      open_task = subject_task || predicate_task || open_task.parent
+      open_task = subject_task || predicate_task || open_task.parent_task
 
 
     when 'u', 'up'
