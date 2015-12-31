@@ -152,12 +152,12 @@ end
 
 class String
   def to_task(open_task)
-    return open_task if self.empty?
+    return nil if self.empty?
     first_number_match = /^\/?([0-9]+)\/?/.match(self)
     target_task = open_task[first_number_match[1].to_i]
 
     # Recurse through the rest of the string
-    $'.to_task(target_task)
+    $'.to_task(target_task) || target_task
   end
 end
 
