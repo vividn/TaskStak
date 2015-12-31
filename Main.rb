@@ -70,13 +70,12 @@ while true
 
   case action
     when 'a', 'add'
-      #TODO: might have to fix for adding things to the end of the list
       #when 'a' follows a task add new_task after it
       #when 'a' precedes a task number add new_task before it
       #if no task is specified at to the top of the current list
       if not(subject_str.empty?)
         # 'a' follows task (e.g., 3/2a)
-        parent_task = (subject_task || open_task).parent_task
+        parent_task = (subject_task || open_task).parent_task #TODO: look into this || as a cause of starting first subtask bug
         insert_location = subject_int
       elsif not(predicate_str.empty?)
         # 'a' precedes task (e.g., a4)
@@ -98,6 +97,13 @@ while true
 
     when 'x', 'check', 'done'
     when 'o', 'open'
+      #opens a task so that it the current task
+      #if o appears by itself open parent task
+
+      #Prioritize number entered before 'o'
+      open_task = subject_task || predicate_task || open_task.parent
+
+
     when 'u', 'up'
     when 'd', 'down'
     when 'm', 'move'
