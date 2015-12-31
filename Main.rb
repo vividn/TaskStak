@@ -107,7 +107,15 @@ while true
     when 'u', 'up'
     when 'd', 'down'
     when 'm', 'move'
+
     when 'i', 'inbox'
+      if input_text
+        inbox.insert_subtask(subtask = input_text)
+      else
+        inbox.add_subtask
+      end
+
+
     when 'l', 'load'
     when 's', 'save'
 
