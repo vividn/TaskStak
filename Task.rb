@@ -81,7 +81,7 @@ class Task
       raise TypeError.new "remove() needs Integer or Task, got #{subtask.class}"
     end
     self.renumber
-    return ret
+    ret
   end
 
   def add_subtask(location = @subtasks.length)
@@ -123,7 +123,7 @@ class Task
   def create_output_string(indent_level=-1,position=0)
 
     #Output string
-    ret = ""
+    ret = ''
 
     #No index number for top level list
     if indent_level >= 0
@@ -134,9 +134,9 @@ class Task
 
       #Add collapsing character (+ or -, · if no subtasks)
       if @collapsed && !@subtasks.empty?
-        collapsing_format_str = "[%d] "
+        collapsing_format_str = '[%d] '
       else
-        collapsing_format_str = "%d| "
+        collapsing_format_str = '%d| '
       end
 
       #Add index number
@@ -150,7 +150,7 @@ class Task
 
     # Add underline if title
     if indent_level < 0
-      ret << "~"*(@name.length+2)
+      ret << '~'*(@name.length+2)
       ret << "\n"
     end
 

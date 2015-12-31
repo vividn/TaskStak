@@ -1,23 +1,23 @@
 require_relative 'task'
 #TODO: use ARGV to pass in task file
 
-top_level_task = Task.new("Top Level")
+top_level_task = Task.new('Top Level')
 open_task = top_level_task
 
 # Create specialized inbox list
-inbox = Task.new("Inbox")
+inbox = Task.new('Inbox')
 inbox.move(top_level_task)
 
 #TODO: add ability to change default action behavior
-default_action_slash = "open"
-default_action_no_slash = "add"
+default_action_slash = 'open'
+default_action_no_slash = 'add'
 #TODO: add settings and default settings hashes
 
 while true
-  system "clear" or system "cls"
+  system 'clear' or system 'cls'
   print open_task
 
-  input = gets() #TODO add input prompt
+  input = gets #TODO add input prompt
   next if input.empty?
 
   # Input should be in the for (subject)(action)(predicate) text
@@ -29,20 +29,20 @@ while true
   #TODO: Do something with bad input
   #TODO: Refactor to_task as a generic method rather than string method, return parent task as well
 
-  subject_str = parsed_input["subject"] || ""
+  subject_str = parsed_input['subject'] || ''
   subject_task = subject_str.to_task(open_task)
-  subject_end_slash = subject_str[-1].eql?("/")
+  subject_end_slash = subject_str[-1].eql?('/')
   # Subject int is the last number in the series, used when doing operations on the parent task.
   subject_int = /[0-9]+\/?$/.match(subject_str).to_s.to_i
 
-  action = parsed_input["action"]
+  action = parsed_input['action']
 
-  predicate_str = parsed_input["predicate"] || ""
+  predicate_str = parsed_input['predicate'] || ''
   predicate_task = predicate_str.to_task(open_task)
   predicate_int = /[0-9]+$/.match(predicate_str).to_s.to_i
-  predicate_end_slash = predicate_str[-1].eql?("/")
+  predicate_end_slash = predicate_str[-1].eql?('/')
 
-  input_text = parsed_input["text"]
+  input_text = parsed_input['text']
 
   #Shorthand for quick commands. Does default if only subject is provided
   unless action
