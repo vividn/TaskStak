@@ -1,6 +1,24 @@
 require_relative 'task'
 #TODO: use ARGV to pass in task file
 
+##################
+# Default Values #
+##################
+completed_list_length_default = 5
+
+
+
+
+##################
+#    Settings    #
+##################
+view_completed_tasks = false
+
+
+
+
+
+
 top_level_task = Task.new('Top Level')
 open_task = top_level_task
 
@@ -15,8 +33,17 @@ default_action_no_slash = 'add'
 
 while true
   system 'clear' or system 'cls'
-  print open_task
+  puts open_task
 
+  if view_completed_tasks
+    puts '-----------'
+    puts ' Completed '
+    open_task.xsubtasks[0,view_completed_tasks].each_with_index do |subtask, ind|
+      puts "✓ #{ind}. #{subtask.name}"
+    end
+  end
+
+  print "\n\nCommand:"
   input = gets #TODO add input prompt
   next if input.empty?
 
@@ -33,13 +60,13 @@ while true
   subject_task = subject_str.to_task(open_task)
   subject_end_slash = subject_str[-1].eql?('/')
   # Subject int is the last number in the series, used when doing operations on the parent task.
-  subject_int = /[0-9]+\/?$/.match(subject_str).to_s.to_i
+  subject_int =  subject_task ? /[0-9]+\/?$/.match(subject_str).to_s.to_i : nil
 
   action = parsed_input['action']
 
   predicate_str = parsed_input['predicate'] || ''
   predicate_task = predicate_str.to_task(open_task)
-  predicate_int = /[0-9]+$/.match(predicate_str).to_s.to_i
+  predicate_int = predicate_task ? /[0-9]+$/.match(predicate_str).to_s.to_i : nil
   predicate_end_slash = predicate_str[-1].eql?('/')
 
   input_text = parsed_input['text']
@@ -67,6 +94,8 @@ while true
   # i, inbox        - adds tasks to the inbox
   # l, load         - loads given task from a txt file (overwrites or appends to current subtasks)
   # s, save         - saves task to a txt file
+  # v, view,        - views most recently completed subtasks in the open task
+  #    completed
 
   case action
     when 'a', 'add'
@@ -100,9 +129,26 @@ while true
       completing_task.mark_complete
 
     when 'xx', 'ux', 'uncheck'
-      open_task.xsubtasks[0].mark_incomplete
+      #calling with number unchecks nth most recently completed subtask in open_task
+      open_task.xsubtasks[subject_int || predicate_int || 0].mark_incomplete
 
-    when 'c','completed'
+
+    when 'v', 'view', 'completed'
+      length = subject_int || predicate_int || completed_list_length_default
+
+      if view_completed_tasks == length
+        view_completed_tasks = false
+      else
+        view_completed_tasks = length
+      end
+
+
+
+    when 'z', 'undo'
+
+    when 'l', 'last view'
+
+    when '?', 'help'
 
 
     when 'o', 'open'
