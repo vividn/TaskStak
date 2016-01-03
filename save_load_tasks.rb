@@ -5,9 +5,11 @@ require_relative 'task'
 
 # load_task returns a task loaded from a .txt file where indents create subtasks
 def load_task(task_file_str, name=nil)
-  name = name || task_file_str.slice(/^.*\./)
+  name = name || task_file_str.partition(/\./)[0]
 
   lines = []
+  #TODO: bad file name
+  #TODO: remove underscores
   File.open(task_file_str,'r') do |task_file|
     while line = task_file.gets
       lines.push(line)
@@ -62,6 +64,3 @@ def save_task(task,task_file_str)
     task_writer(task_file, task, 0)
   end
 end
-
-a = load_task("Sample_task_list.txt")
-save_task(a,"sample_out.txt")

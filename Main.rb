@@ -1,10 +1,12 @@
 require_relative 'task'
+require_relative 'save_load_tasks'
 #TODO: use ARGV to pass in task file
 
 ##################
 # Default Values #
 ##################
 completed_list_length_default = 5
+file_extension_default = '.txt'
 
 
 
@@ -44,7 +46,7 @@ while true
   end
 
   print "\n\nCommand:"
-  input = gets #TODO add input prompt
+  input = gets
   next if input.empty?
 
   # Input should be in the for (subject)(action)(predicate) text
@@ -146,7 +148,7 @@ while true
 
     when 'z', 'undo'
 
-    when 'l', 'last view'
+    when 'lv', 'last view'
 
     when '?', 'help'
 
@@ -171,8 +173,40 @@ while true
       end
 
 
-    when 'l', 'load'
+    when 'l', 'load', 'import'
+      #inserts a loaded task file as subtask of open_task
+
+      file_name = input_text || (print("\nFile_name:");gets)
+
+      #add default file extension if no file type is specified
+      file_name += file_extension_default unless file_name.match(/\./)
+
+      imported_task = load_task(file_name)
+      #TODO: add ability to specify different name for the loading task
+      imported_task.move(open_task)
+
+
+    when 'L', 'Load', 'replace'
+      #replaces open_task with loaded task
+
+      file_name = input_text || (print("\nFile_name:");gets)
+
+      #add default file extension if no file type is specified
+      file_name += file_extension_default unless file_name.match(/\./)
+
+      loaded_task = load_task(file_name)
+      #TODO: add ability to specify different name for the loading task
+      open_task = loaded_task
+
+
+
     when 's', 'save'
+
+    when 'clear' #clears current list
+
+    when 'new' #starts an entirely new list
+
+
 
     else
       #TODO: Add bad command error
