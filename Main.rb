@@ -19,13 +19,40 @@ view_completed_tasks = false
 
 
 
+###################
+#   Title Screen  #
+###################
+#TODO skip title screen option
+
+system 'clear' or system 'cls'
+puts '''
+
+#############################################
+  _______        _     _____ _        _
+ |__   __|      | |   / ____| |      | |
+    | | __ _ ___| | _| (___ | |_ __ _| | __
+    | |/ _` / __| |/ /\___ \| __/ _` | |/ /
+    | | (_| \__ \   < ____) | || (_| |   <
+    |_|\__,_|___/_|\_\_____/ \__\__,_|_|\_\
+
+#############################################
 
 
-top_level_task = Task.new('Top Level')
-open_task = top_level_task
+'''
+print 'List Name: '; input_text = gets.chomp
+
+file_name = input_text || 'Default'
+
+#add default file extension if no file type is specified
+file_name += file_extension_default unless file_name.match(/\./)
+top_level_task = load_task(file_name)
+
+
+# Search for top level subtask named inbox, and creates it if it is not there
+find_inbox = top_level_task.subtasks.select {|subtask| subtask.name == 'Inbox'}
 
 # Create specialized inbox list
-inbox = Task.new('Inbox')
+inbox = find_inbox[0] || Task.new('Inbox')
 inbox.move(top_level_task)
 
 #TODO: add ability to change default action behavior
@@ -33,6 +60,7 @@ default_action_slash = 'open'
 default_action_no_slash = 'add'
 #TODO: add settings and default settings hashes
 
+open_task = top_level_task
 while true
   system 'clear' or system 'cls'
   puts open_task
@@ -189,7 +217,7 @@ while true
     when 'L', 'Load', 'replace'
       #replaces open_task with loaded task
 
-      file_name = input_text || (print("\nFile_name:");gets)
+      file_name = input_text || (print("\nFile_name:");gets.chomp)
 
       #add default file extension if no file type is specified
       file_name += file_extension_default unless file_name.match(/\./)
@@ -198,11 +226,8 @@ while true
       #TODO: add ability to specify different name for the loading task
       open_task = loaded_task
 
-
-
-    when 's', 'save'
-
     when 'clear' #clears current list
+      #TODO: make undo feature before this one!
 
     when 'new' #starts an entirely new list
 

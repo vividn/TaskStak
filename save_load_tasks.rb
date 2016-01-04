@@ -6,17 +6,20 @@ require_relative 'task'
 # load_task returns a task loaded from a .txt file where indents create subtasks
 def load_task(task_file_str, name=nil)
   name = name || task_file_str.partition(/\./)[0]
+  return_task = Task.new(name)
+  #TODO: remove/insert underscores
+
+
+  return return_task unless File.exist?(task_file_str)
 
   lines = []
-  #TODO: bad file name
-  #TODO: remove underscores
   File.open(task_file_str,'r') do |task_file|
     while line = task_file.gets
       lines.push(line)
     end
   end
 
-  return_task = Task.new(name)
+
 
   previous_task = return_task
   indent_level = -1
