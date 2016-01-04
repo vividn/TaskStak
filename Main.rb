@@ -8,7 +8,10 @@ require_relative 'save_load_tasks'
 completed_list_length_default = 5
 file_extension_default = '.txt'
 
-
+#TODO: add ability to change default action behavior
+default_action_slash = 'open'
+default_action_no_slash = 'add'
+#TODO: add settings and default settings hashes
 
 
 ##################
@@ -55,12 +58,8 @@ find_inbox = top_level_task.subtasks.select {|subtask| subtask.name == 'Inbox'}
 inbox = find_inbox[0] || Task.new('Inbox')
 inbox.move(top_level_task)
 
-#TODO: add ability to change default action behavior
-default_action_slash = 'open'
-default_action_no_slash = 'add'
-#TODO: add settings and default settings hashes
-
 open_task = top_level_task
+
 while true
   system 'clear' or system 'cls'
   puts open_task
@@ -214,17 +213,23 @@ while true
       imported_task.move(open_task)
 
 
-    when 'L', 'Load', 'replace'
-      #replaces open_task with loaded task
-
-      file_name = input_text || (print("\nFile_name:");gets.chomp)
+    when 'L', 'Load'
+      #Loads a new top_level_task
 
       #add default file extension if no file type is specified
+      file_name = input_text || (print 'File name: '; gets.chomp)
       file_name += file_extension_default unless file_name.match(/\./)
+      top_level_task = load_task(file_name)
 
-      loaded_task = load_task(file_name)
-      #TODO: add ability to specify different name for the loading task
-      open_task = loaded_task
+
+      # Search for top level subtask named inbox, and creates it if it is not there
+      find_inbox = top_level_task.subtasks.select {|subtask| subtask.name == 'Inbox'}
+
+      # Create specialized inbox list
+      inbox = find_inbox[0] || Task.new('Inbox')
+      inbox.move(top_level_task)
+
+      open_task = top_level_task
 
     when 'clear' #clears current list
       #TODO: make undo feature before this one!
@@ -237,6 +242,8 @@ while true
       #TODO: Add bad command error
 
   end
+
+save_task(top_level_task,file_name)
 
 
 end
