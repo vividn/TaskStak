@@ -5,5 +5,4 @@ blist
 		Level 2
 			Level 3
 	Wanna
-	Inbox
 Inbox

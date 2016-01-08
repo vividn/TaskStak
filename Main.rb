@@ -7,6 +7,7 @@ require_relative 'save_load_tasks'
 ##################
 completed_list_length_default = 5
 file_extension_default = '.txt'
+default_file_path = ENV['userprofile'] + "\\Documents\\TaskStak\\"
 
 #TODO: add ability to change default action behavior
 default_action_slash = 'open'
@@ -57,6 +58,10 @@ find_inbox = top_level_task.subtasks.select {|subtask| subtask.name == 'Inbox'}
 # Create specialized inbox list
 inbox = find_inbox[0] || Task.new('Inbox')
 inbox.move(top_level_task)
+
+revert_file_name = file_name + '.revert'
+save_task(top_level_task,revert_file_name)
+
 
 open_task = top_level_task
 
@@ -159,6 +164,7 @@ while true
 
     when 'xx', 'ux', 'uncheck'
       #calling with number unchecks nth most recently completed subtask in open_task
+      next if open_task.xsubtasks.empty?
       open_task.xsubtasks[subject_int || predicate_int || 0].mark_incomplete
 
 
@@ -229,6 +235,9 @@ while true
       inbox = find_inbox[0] || Task.new('Inbox')
       inbox.move(top_level_task)
 
+      revert_file_name = file_name + '.revert'
+      save_task(top_level_task,revert_file_name)
+
       open_task = top_level_task
 
     when 'clear' #clears current list
@@ -236,7 +245,13 @@ while true
 
     when 'new' #starts an entirely new list
 
+    when 'save'
+      save_task(top_level_task,revert_file_name)
 
+    when 'revert'
+      #reverts to original load state or most recent manual save for list
+      top_level_task = load_task(revert_file_name,top_level_task.name)
+      open_task = top_level_task
 
     else
       #TODO: Add bad command error
