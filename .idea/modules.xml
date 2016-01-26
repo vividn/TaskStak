@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../GameOfPrimes/.idea/GameOfPrimes.iml" filepath="$PROJECT_DIR$/../GameOfPrimes/.idea/GameOfPrimes.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Routine Master/.idea/Routine Master.iml" filepath="$PROJECT_DIR$/../Routine Master/.idea/Routine Master.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../TaskStak/.idea/Task Stack.iml" filepath="$PROJECT_DIR$/../TaskStak/.idea/Task Stack.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Task Stack.iml" filepath="$PROJECT_DIR$/.idea/Task Stack.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Testing/.idea/Testing.iml" filepath="$PROJECT_DIR$/../Testing/.idea/Testing.iml" />
     </modules>
   </component>
