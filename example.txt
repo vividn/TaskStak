@@ -1,0 +1,11 @@
+shopping list
+	groceries
+		milk
+		bread
+		cheese
+personal
+	fix dishwasher
+work
+	solve consciousness
+	papers to read
+Inbox
