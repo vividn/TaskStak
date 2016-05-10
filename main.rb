@@ -7,7 +7,7 @@ require_relative 'save_load_tasks'
 ##################
 completed_list_length_default = 5
 file_extension_default = '.txt'
-default_file_path = ENV['userprofile'] + "\\Documents\\TaskStak\\"
+#default_file_path = ENV['userprofile'] + "\\Documents\\TaskStak\\"
 
 #TODO: add ability to change default action behavior
 default_action_slash = 'open'
